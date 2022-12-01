@@ -153,7 +153,7 @@ def createDF(gps_all):
         df_map.loc[i] = [df.loc[i]['주소'],df.loc[i][1][0],df.loc[i][1][1]]
 
     # 위도,경도 주소변환 데이터프레임 시각화
-    st.dataframe(df)
+    #st.dataframe(df)
 
     # 해당 지역 위치정보 개수 표기
     st.write(option,'지역, 보수가 필요한 구역: ',len(df),'개')
@@ -199,34 +199,35 @@ def aggrid_interactive_table(df):
 
     return selection
 
-selection = aggrid_interactive_table(df_map)
-
-if selection:
-# df 위/경도 뽑기
-    st.write("보수가 필요한 포트홀")
-    #st.write('위도: ', selection['selected_rows'][0]['위도'], '경도: ', selection['selected_rows'][0]['경도'])
-    if selection['selected_rows'][0]['위도'] == 35.812507:
-        img=Image.open(r'C:\streamlit\탐지결과\1.jpg')
-        st.image(img)
-    if selection['selected_rows'][0]['위도'] == 35.832596089:
-        img=Image.open(r'C:\streamlit\탐지결과\2.jpg')
-        st.image(img)
-    if selection['selected_rows'][0]['위도'] == 35.88249341:
-        img=Image.open(r'C:\streamlit\탐지결과\3.jpg')
-        st.image(img)
-    if selection['selected_rows'][0]['위도'] == 35.86262305:
-        img=Image.open(r'C:\streamlit\탐지결과\4.jpg')
-        st.image(img)
-    if selection['selected_rows'][0]['위도'] == 35.8428000942:
-        img=Image.open(r'C:\streamlit\탐지결과\5.jpg')
-        st.image(img)
-    if selection['selected_rows'][0]['위도'] == 35.8723688469:
-        img=Image.open(r'C:\streamlit\탐지결과\7.jpg')
-        st.image(img)
-    if selection['selected_rows'][0]['위도'] == 35.8920472:
-        img=Image.open(r'C:\streamlit\탐지결과\8.jpg')
-        st.image(img)
-
-
-
-
+col1, col2 = st.columns(2)
+with col1:
+    selection = aggrid_interactive_table(df_map)
+with col2:
+    try:
+        if selection:
+        # df 위/경도 뽑기
+            #st.write("보수가 필요한 포트홀")
+            #st.write('위도: ', selection['selected_rows'][0]['위도'], '경도: ', selection['selected_rows'][0]['경도'])
+            if selection['selected_rows'][0]['위도'] == 35.812507:
+                img=Image.open(r'C:\streamlit\탐지결과\1.jpg')
+                st.image(img)
+            if selection['selected_rows'][0]['위도'] == 35.832596089:
+                img=Image.open(r'C:\streamlit\탐지결과\2.jpg')
+                st.image(img)
+            if selection['selected_rows'][0]['위도'] == 35.88249341:
+                img=Image.open(r'C:\streamlit\탐지결과\3.jpg')
+                st.image(img)
+            if selection['selected_rows'][0]['위도'] == 35.86262305:
+                img=Image.open(r'C:\streamlit\탐지결과\4.jpg')
+                st.image(img)
+            if selection['selected_rows'][0]['위도'] == 35.8428000942:
+                img=Image.open(r'C:\streamlit\탐지결과\5.jpg')
+                st.image(img)
+            if selection['selected_rows'][0]['위도'] == 35.8723688469:
+                img=Image.open(r'C:\streamlit\탐지결과\7.jpg')
+                st.image(img)
+            if selection['selected_rows'][0]['위도'] == 35.8920472:
+                img=Image.open(r'C:\streamlit\탐지결과\8.jpg')
+                st.image(img)
+    except:
+        pass
