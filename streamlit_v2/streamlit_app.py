@@ -137,6 +137,14 @@ def main():
                 gps = pd.DataFrame([[crd[1], crd[0]]], columns=['위도', '경도'])
 
             return gps
+        
+        # 실시간 위치정보 수집(시연용) - 경북대학교
+        def geocoding():
+            geolocoder = Nominatim(user_agent = 'South Korea', timeout=None)
+            geo = geolocoder.geocode("대구 북구 경북대학교 글로벌플라자")
+            crd = {"lat": str(geo.latitude), "lng": str(geo.longitude)}
+            gps = pd.DataFrame( [[crd['lat'],crd['lng']]], columns=['위도','경도'])
+            return gps
 
         # 맵에 위치 표시 ------------------------------------------------------------------------------------------
 
@@ -244,7 +252,8 @@ def main():
         # [ 지도 함수 실행 코드 ]------------------------------------------------------------------------
 
         # 실시간 위치정보 수집
-        gps = current_location()
+        # gps = current_location() # 실시간 좌표용
+        gps = geocoding() # 시연용 -경북대학교 글로벌플라자
 
         # 기존 위치정보데이터에 실시간 위치정보 추가 갱신
         add_gps_all(gps)
