@@ -86,7 +86,7 @@ def location_detail(data_c):
         # Deck 클래스 인스턴스 생성
         deck = pdk.Deck(height=100,
                         #width=1000,
-                        map_style=None, 
+                        map_style='mapbox://styles/mapbox/streets-v11', 
                         initial_view_state=pdk.ViewState(longitude=lo, 
                                                         latitude=la, 
                                                         zoom=12, 
@@ -113,7 +113,7 @@ def add_gps_all(gps):
     gps_all = gps_all.drop('index',axis=1)
 
     # 중복 위치정보 제거
-    gps_all = gps_all.drop_duplicates(['위도','경도'])
+    gps_all = gps_all.drop_duplicates()
 
     # 추가 위치정보 저장된 데이터프레임 저장
     gps_all.to_csv('gps_all.csv',index = False)
@@ -128,8 +128,6 @@ def geocoding_reverse(lat_lng_str):
     address = geolocoder.reverse(lat_lng_str)
 
     return address
-
-
 
 # [ 지역 구별 주소 데이터프레임 함수 ]----------------------------------------------------
 def createDF(gps_all):
@@ -153,10 +151,10 @@ def createDF(gps_all):
         df_map.loc[i] = [df.loc[i]['주소'],df.loc[i][1][0],df.loc[i][1][1]]
 
     # 위도,경도 주소변환 데이터프레임 시각화
-    st.dataframe(df)
+    st.dataframe(df_map)
 
     # 해당 지역 위치정보 개수 표기
-    st.write(option,'지역, 보수가 필요한 구역: ',len(df),'개')
+    st.write(option,'지역, 보수가 필요한 구역: ',len(df_map),'개')
     
     return df_map
 #---------------------------------------------------------------
@@ -167,7 +165,7 @@ def createDF(gps_all):
 gps = geocoding()   # 시연용
 #gps = current_location()   # 실시간좌표
 
-# 기존 위치정보데이터에 실시간 위치정보 추가 갱신
+# 기존 위치정보 데이터에 실시간 위치정보 추가 갱신
 add_gps_all(gps)
 
 # 최종 수정된 전체 위치정보 파일 불러오기
@@ -175,7 +173,6 @@ gps_all = pd.read_csv('gps_all.csv')
 
 # 주소 데이터프레임 표시
 df_map = createDF(gps_all) 
+
 # 전체 위치정보 웹 지도에 표시
 location_detail(df_map)
-
-
