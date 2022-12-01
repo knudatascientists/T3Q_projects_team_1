@@ -16,9 +16,11 @@ option = st.sidebar.selectbox(
 
 
 # [ 현재위치 좌표 수집 함수 ] --------------------------------------------------------------
+# 실시간 위치정보 수집
 import requests, json
 import pandas as pd
 import numpy as np
+from geopy.geocoders import Nominatim
 
 def current_location():
     here_req = requests.get("http://www.geoplugin.net/json.gp")
@@ -33,7 +35,13 @@ def current_location():
     
     return gps
     
-
+# 실시간 위치정보 수집(시연용) - 경북대학교
+def geocoding():
+    geolocoder = Nominatim(user_agent = 'South Korea', timeout=None)
+    geo = geolocoder.geocode("대구 북구 경북대학교 글로벌플라자")
+    crd = {"lat": str(geo.latitude), "lng": str(geo.longitude)}
+    gps = pd.DataFrame( [[crd['lat'],crd['lng']]], columns=['위도','경도'])
+    return gps
 
 # [ 맵에 위치 표시 함수] ------------------------------------------------------------------------------------------
 import numpy as np
@@ -156,7 +164,8 @@ def createDF(gps_all):
 # [ 지도 함수 실행 코드 ]------------------------------------------------------------------------
 
 # 실시간 위치정보 수집
-gps = current_location()
+gps = geocoding()   # 시연용
+#gps = current_location()   # 실시간좌표
 
 # 기존 위치정보데이터에 실시간 위치정보 추가 갱신
 add_gps_all(gps)
@@ -168,3 +177,5 @@ gps_all = pd.read_csv('gps_all.csv')
 df_map = createDF(gps_all) 
 # 전체 위치정보 웹 지도에 표시
 location_detail(df_map)
+
+

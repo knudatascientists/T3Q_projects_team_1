@@ -1,0 +1,15 @@
+pandas
+numpy
+streamlit
+tensorflow
+jupyter
+matplotlib
+folium
+geopy
+geopandas
+pydeck
+tkinter
+pyparsing
+PIL
+cv2
+sqlite3
