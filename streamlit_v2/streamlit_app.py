@@ -207,7 +207,7 @@ def main():
             gps_all = gps_all.drop('index',axis=1)
 
             # 중복 위치정보 제거
-            gps_all = gps_all.drop_duplicates(['위도','경도'])
+            gps_all = gps_all.drop_duplicates()
 
             # 추가 위치정보 저장된 데이터프레임 저장
             gps_all.to_csv('gps_all.csv',index = False)
@@ -240,12 +240,7 @@ def main():
             df_map = pd.DataFrame(columns=['주소','위도','경도'])
             for i in range(len(df)):
                 df_map.loc[i] = [df.loc[i]['주소'],df.loc[i][1][0],df.loc[i][1][1]]
-
-            # 위도,경도 주소변환 데이터프레임 시각화
-            st.dataframe(df)
-
-            # 해당 지역 위치정보 개수 표기
-            st.write(option,'지역, 보수가 필요한 구역: ',len(df),'개')
+            df_map = df_map.drop_duplicates()
 
             return df_map                
 
@@ -261,8 +256,15 @@ def main():
         # 최종 수정된 전체 위치정보 파일 불러오기
         gps_all = pd.read_csv('gps_all.csv')
 
-        # 주소 데이터프레임 표시
+        # 주소 데이터프레임 수집
         df_map = createDF(gps_all) 
+
+        # 위도,경도 주소변환 데이터프레임 시각화
+        st.dataframe(df_map)
+
+        # 해당 지역 위치정보 개수 표기
+        st.write(option,'지역, 보수가 필요한 구역: ',len(df_map),'개')
+
         # 전체 위치정보 웹 지도에 표시
         location_detail(df_map)
 
