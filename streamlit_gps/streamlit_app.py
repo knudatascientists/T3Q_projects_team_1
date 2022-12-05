@@ -170,7 +170,7 @@ add_gps_all(gps)
 
 # 최종 수정된 전체 위치정보 파일 불러오기
 gps_all = pd.read_csv('gps_all.csv')
-
+gps_all = gps_all.drop_duplicates()
 # 주소 데이터프레임 표시
 df_map = createDF(gps_all) 
 
