@@ -1,4 +1,4 @@
-# ëª¨ë“ˆ ë¡œë”©
+# ¸ğµâ ·Îµù
 import sqlite3, cv2
 import streamlit as st
 from PIL import Image, ImageEnhance
@@ -10,10 +10,10 @@ import yolo_v5.detect as detect
 from tkinter.tix import COLUMN
 from pyparsing import empty
 
-# ë ˆì´ì•„ì›ƒ ê´€ë ¨
+# ·¹ÀÌ¾Æ¿ô °ü·Ã
 st.set_page_config(layout="wide")
 
-# ë¡œê·¸ì¸ í™”ë©´
+# ·Î±×ÀÎ È­¸é
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
 
@@ -46,16 +46,16 @@ def login_user(username, password):
 
 
 def main():
-    # st.title("ë¡œê·¸ì¸ ê¸°ëŠ¥ í…ŒìŠ¤íŠ¸")
+    # st.title("·Î±×ÀÎ ±â´É Å×½ºÆ®")
 
     menu = ["Login", "signUp", "Dectection", "Map"]
     choice = st.sidebar.selectbox("MENU", menu)
 
     if choice == "Login":
-        st.subheader("ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”")
+        st.subheader("·Î±×ÀÎ ÇØÁÖ¼¼¿ä")
 
-        username = st.sidebar.text_input("ìœ ì €ëª…ì„ ì…ë ¥í•´ì£¼ì„¸ìš”")
-        password = st.sidebar.text_input("ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”", type='password')
+        username = st.sidebar.text_input("À¯Àú¸íÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä")
+        password = st.sidebar.text_input("ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä", type='password')
         if st.sidebar.checkbox("Login"):
             create_user()
             hashed_pswd = make_hashes(password)
@@ -63,83 +63,83 @@ def main():
             result = login_user(username, check_hashes(password, hashed_pswd))
             if result:
 
-                st.success("{}ë‹˜ìœ¼ë¡œ ë¡œê·¸ì¸í–ˆìŠµë‹ˆë‹¤.".format(username))
+                st.success("{}´ÔÀ¸·Î ·Î±×ÀÎÇß½À´Ï´Ù.".format(username))
 
             else:
-                st.warning("ì‚¬ìš©ì ì´ë¦„ì´ë‚˜ ë¹„ë°€ë²ˆí˜¸ê°€ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤.")
+                st.warning("»ç¿ëÀÚ ÀÌ¸§ÀÌ³ª ºñ¹Ğ¹øÈ£°¡ Àß¸øµÇ¾ú½À´Ï´Ù.")
 
     elif choice == "signUp":
-        st.subheader("ìƒˆ ê³„ì •ì„ ë§Œë“­ë‹ˆë‹¤.")
-        new_user = st.text_input("ìœ ì €ëª…ì„ ì…ë ¥í•´ì£¼ì„¸ìš”")
-        new_password = st.text_input("ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”", type='password')
+        st.subheader("»õ °èÁ¤À» ¸¸µì´Ï´Ù.")
+        new_user = st.text_input("À¯Àú¸íÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä")
+        new_password = st.text_input("ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä", type='password')
 
         if st.button("signUp"):
             create_user()
             add_user(new_user, make_hashes(new_password))
-            st.success("ê³„ì • ìƒì„±ì— ì„±ê³µí–ˆìŠµë‹ˆë‹¤.")
-            st.info("ë¡œê·¸ì¸ í™”ë©´ì—ì„œ ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”.")
+            st.success("°èÁ¤ »ı¼º¿¡ ¼º°øÇß½À´Ï´Ù.")
+            st.info("·Î±×ÀÎ È­¸é¿¡¼­ ·Î±×ÀÎ ÇØÁÖ¼¼¿ä.")
 
-    # Detection íƒ­
+    # Detection ÅÇ
     elif choice == "Dectection":
-        st.subheader("ìœ„í—˜ë¬¼ íƒì§€")
+        st.subheader("À§Çè¹° Å½Áö")
         selected_item = st.sidebar.radio("select", ("Image", "Video"))
         st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-        # Image ì—…ë¡œë“œ íƒ­
+        # Image ¾÷·Îµå ÅÇ
         if selected_item == "Image":
             file = st.file_uploader("Upload Image", type=['jpg', 'png', 'jpeg'])
             if file != None:
                 img = Image.open(file)
                 img.save('./temp/temp.png', 'PNG')
                 st.image(img)
-                if st.button("ì¶”ë¡  ê²°ê³¼"):
+                if st.button("Ãß·Ğ °á°ú"):
                     img_result, video_result = detect.run(source=f'./temp/temp.png')
                     st.image(img_result)
-        # Video ì—…ë¡œë“œ íƒ­
+        # Video ¾÷·Îµå ÅÇ
         elif selected_item == "Video":
-            selected_video = st.radio(label="ì˜ìƒì„ ì„ íƒí•´ì£¼ì„¸ìš”.", options=['1', '2', '3', '4'])
+            selected_video = st.radio(label="¿µ»óÀ» ¼±ÅÃÇØÁÖ¼¼¿ä.", options=['1', '2', '3', '4'])
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
             if selected_video == "1":
                 st.video('./temp/temp_1.mp4', start_time=0)
-                if st.button("ì¶”ë¡  ê²°ê³¼"):
+                if st.button("Ãß·Ğ °á°ú"):
                     # img_result, video_result = detect.run(source=f'./temp/temp_1_result.mp4')
                     st.video('./temp/temp_1_result.mp4', 'rb', start_time=0)
             elif selected_video == "2":
                 st.video('./temp/temp_1.mp4', start_time=0)
-                if st.button("ì¶”ë¡  ê²°ê³¼"):
+                if st.button("Ãß·Ğ °á°ú"):
                     st.video('./temp/temp_1.mp4', start_time=0)
             elif selected_video == "3":
                 st.video('./temp/temp_1.mp4', start_time=0)
-                if st.button("ì¶”ë¡  ê²°ê³¼"):
+                if st.button("Ãß·Ğ °á°ú"):
                     st.video('./temp/temp_1.mp4', start_time=0)
             elif selected_video == "4":
                 st.video('./temp/temp_1.mp4', start_time=0)
-                if st.button("ì¶”ë¡  ê²°ê³¼"):
+                if st.button("Ãß·Ğ °á°ú"):
                     st.video('./temp/temp_1.mp4', start_time=0)
 
 
     elif choice == "Map":
-        # í˜„ì¬ìœ„ì¹˜ ì¢Œí‘œ ì–»ê¸°
+        # ÇöÀçÀ§Ä¡ ÁÂÇ¥ ¾ò±â
         def current_location():
             here_req = requests.get("http://www.geoplugin.net/json.gp")
 
             if (here_req.status_code != 200):
-                print("í˜„ì¬ì¢Œí‘œë¥¼ ë¶ˆëŸ¬ì˜¬ ìˆ˜ ì—†ìŒ")
+                print("ÇöÀçÁÂÇ¥¸¦ ºÒ·¯¿Ã ¼ö ¾øÀ½")
             else:
                 location = json.loads(here_req.text)
                 crd = {float(location["geoplugin_latitude"]), float(location["geoplugin_longitude"])}
                 crd = list(crd)
-                gps = pd.DataFrame([[crd[1], crd[0]]], columns=['ìœ„ë„', 'ê²½ë„'])
+                gps = pd.DataFrame([[crd[1], crd[0]]], columns=['À§µµ', '°æµµ'])
 
             return gps
 
-        # ë§µì— ìœ„ì¹˜ í‘œì‹œ ------------------------------------------------------------------------------------------
+        # ¸Ê¿¡ À§Ä¡ Ç¥½Ã ------------------------------------------------------------------------------------------
 
-        # ìœ„ì¹˜ì •ë³´ ìƒì„¸ (ë‹¨, dataì— ìœ„ë„, ê²½ë„ ì»¬ëŸ¼ì´ ìˆì–´ì•¼ í•¨)
+        # À§Ä¡Á¤º¸ »ó¼¼ (´Ü, data¿¡ À§µµ, °æµµ ÄÃ·³ÀÌ ÀÖ¾î¾ß ÇÔ)
 
         def location_detail(data_c):
             data = data_c.copy()
 
-            # ì•„ì´ì½˜ ì´ë¯¸ì§€ ë¶ˆëŸ¬ì˜¤ê¸°
+            # ¾ÆÀÌÄÜ ÀÌ¹ÌÁö ºÒ·¯¿À±â
             ICON_URL = "https://cdn-icons-png.flaticon.com/128/2268/2268142.png"
             icon_data = {
                 # Icon from Wikimedia, used the Creative Commons Attribution-Share Alike 3.0
@@ -152,7 +152,7 @@ def main():
             data["icon_data"] = None
             for i in data.index:
                 data["icon_data"][i] = icon_data
-            la, lo = np.mean(data["ìœ„ë„"]), np.mean(data["ê²½ë„"])
+            la, lo = np.mean(data["À§µµ"]), np.mean(data["°æµµ"])
 
             layers = [
                 pdk.Layer(
@@ -161,12 +161,12 @@ def main():
                     get_icon="icon_data",
                     get_size=4,
                     size_scale=15,
-                    get_position="[ê²½ë„, ìœ„ë„]",
+                    get_position="[°æµµ, À§µµ]",
                     pickable=True,
                 )
             ]
 
-            # Deck í´ë˜ìŠ¤ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
+            # Deck Å¬·¡½º ÀÎ½ºÅÏ½º »ı¼º
             deck = pdk.Deck(
                 map_style=None, initial_view_state=pdk.ViewState(longitude=lo, latitude=la, zoom=11, pitch=50),
                 layers=layers
@@ -174,7 +174,7 @@ def main():
 
             st.pydeck_chart(deck, use_container_width=True)
 
-        # ì‹¤ì‹œê°„ ìœ„ì¹˜ ì§€ë„ í‘œì‹œ í•¨ìˆ˜ ì‹¤í–‰ ------------------------------------------------------------------------
+        # ½Ç½Ã°£ À§Ä¡ Áöµµ Ç¥½Ã ÇÔ¼ö ½ÇÇà ------------------------------------------------------------------------
         gps = current_location()
         location_detail(gps)
 

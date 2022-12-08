@@ -1,22 +1,22 @@
-# ì‹¤í–‰ì½”ë“œ-------------------------------------------
+# ½ÇÇàÄÚµå-------------------------------------------
 # streamlit run streamlit_app.py
 #----------------------------------------------------
 
 import streamlit as st 
 st.set_page_config(layout="wide")
 
-# title ì“°ê¸°
-st.title(' ëŒ€êµ¬ê´‘ì—­ì‹œ ìœ ì§€ë³´ìˆ˜ í•„ìš”í•œ í¬íŠ¸í™€ ìœ„ì¹˜ì •ë³´ ')
-# ì§€ì—­ì„ ê³ ë¥´ëŠ” select box
+# title ¾²±â
+st.title(' ´ë±¸±¤¿ª½Ã À¯Áöº¸¼ö ÇÊ¿äÇÑ Æ÷Æ®È¦ À§Ä¡Á¤º¸ ')
+# Áö¿ªÀ» °í¸£´Â select box
 option = st.sidebar.selectbox(
-    'ì–´ë–¤ ì§€ì—­ì„ ê³ ë¥´ì‹œê² ìŠµë‹ˆê¹Œ?',
-    ('ëŒ€êµ¬ ì „ì²´','ë¶êµ¬', 'ì¤‘êµ¬', 'ì„œêµ¬', 'ë™êµ¬',"ë‚¨êµ¬", "ìˆ˜ì„±êµ¬", "ë‹¬ì„œêµ¬", "ë‹¬ì„±êµ°"))
+    '¾î¶² Áö¿ªÀ» °í¸£½Ã°Ú½À´Ï±î?',
+    ('´ë±¸ ÀüÃ¼','ºÏ±¸', 'Áß±¸', '¼­±¸', 'µ¿±¸',"³²±¸", "¼ö¼º±¸", "´Ş¼­±¸", "´Ş¼º±º"))
 
-# if st.sidebar.selectbox('ì‹¤í–‰'):
+# if st.sidebar.selectbox('½ÇÇà'):
 
 
-# [ í˜„ì¬ìœ„ì¹˜ ì¢Œí‘œ ìˆ˜ì§‘ í•¨ìˆ˜ ] --------------------------------------------------------------
-# ì‹¤ì‹œê°„ ìœ„ì¹˜ì •ë³´ ìˆ˜ì§‘
+# [ ÇöÀçÀ§Ä¡ ÁÂÇ¥ ¼öÁı ÇÔ¼ö ] --------------------------------------------------------------
+# ½Ç½Ã°£ À§Ä¡Á¤º¸ ¼öÁı
 import requests, json
 import pandas as pd
 import numpy as np
@@ -26,34 +26,34 @@ def current_location():
     here_req = requests.get("http://www.geoplugin.net/json.gp")
 
     if (here_req.status_code != 200):
-        print("í˜„ì¬ì¢Œí‘œë¥¼ ë¶ˆëŸ¬ì˜¬ ìˆ˜ ì—†ìŒ")
+        print("ÇöÀçÁÂÇ¥¸¦ ºÒ·¯¿Ã ¼ö ¾øÀ½")
     else:
         location = json.loads(here_req.text)
         crd = {float(location["geoplugin_latitude"]), float(location["geoplugin_longitude"])}
         crd = list(crd)
-        gps = pd.DataFrame( [[crd[1],crd[0]]], columns=['ìœ„ë„','ê²½ë„'])
+        gps = pd.DataFrame( [[crd[1],crd[0]]], columns=['À§µµ','°æµµ'])
     
     return gps
     
-# ì‹¤ì‹œê°„ ìœ„ì¹˜ì •ë³´ ìˆ˜ì§‘(ì‹œì—°ìš©) - ê²½ë¶ëŒ€í•™êµ
+# ½Ç½Ã°£ À§Ä¡Á¤º¸ ¼öÁı(½Ã¿¬¿ë) - °æºÏ´ëÇĞ±³
 def geocoding():
     geolocoder = Nominatim(user_agent = 'South Korea', timeout=None)
-    geo = geolocoder.geocode("ëŒ€êµ¬ ë¶êµ¬ ê²½ë¶ëŒ€í•™êµ ê¸€ë¡œë²Œí”Œë¼ì")
+    geo = geolocoder.geocode("´ë±¸ ºÏ±¸ °æºÏ´ëÇĞ±³ ±Û·Î¹úÇÃ¶óÀÚ")
     crd = {"lat": str(geo.latitude), "lng": str(geo.longitude)}
-    gps = pd.DataFrame( [[crd['lat'],crd['lng']]], columns=['ìœ„ë„','ê²½ë„'])
+    gps = pd.DataFrame( [[crd['lat'],crd['lng']]], columns=['À§µµ','°æµµ'])
     return gps
 
-# [ ë§µì— ìœ„ì¹˜ í‘œì‹œ í•¨ìˆ˜] ------------------------------------------------------------------------------------------
+# [ ¸Ê¿¡ À§Ä¡ Ç¥½Ã ÇÔ¼ö] ------------------------------------------------------------------------------------------
 import numpy as np
 import pandas as pd
 import pydeck as pdk
 import streamlit as st
 
-# ìœ„ì¹˜ì •ë³´ ìƒì„¸ (ë‹¨, dataì— ìœ„ë„, ê²½ë„ ì»¬ëŸ¼ì´ ìˆì–´ì•¼ í•¨)
+# À§Ä¡Á¤º¸ »ó¼¼ (´Ü, data¿¡ À§µµ, °æµµ ÄÃ·³ÀÌ ÀÖ¾î¾ß ÇÔ)
 def location_detail(data_c):
     data = data_c.copy()
 
-    # ì•„ì´ì½˜ ì´ë¯¸ì§€ ë¶ˆëŸ¬ì˜¤ê¸°
+    # ¾ÆÀÌÄÜ ÀÌ¹ÌÁö ºÒ·¯¿À±â
     ICON_URL = "https://cdn-icons-png.flaticon.com/512/2711/2711648.png"
     icon_data = {
         # Icon from Wikimedia, used the Creative Commons Attribution-Share Alike 3.0
@@ -66,7 +66,7 @@ def location_detail(data_c):
     data["icon_data"] = None
     for i in data.index:
         data["icon_data"][i] = icon_data
-    la, lo = np.mean(data["ìœ„ë„"]), np.mean(data["ê²½ë„"])
+    la, lo = np.mean(data["À§µµ"]), np.mean(data["°æµµ"])
 
     layers = [
         pdk.Layer(
@@ -75,7 +75,7 @@ def location_detail(data_c):
             get_icon="icon_data",
             get_size=4,
             size_scale=15,
-            get_position="[ê²½ë„, ìœ„ë„]",
+            get_position="[°æµµ, À§µµ]",
             pickable=True,
         )
     ]
@@ -83,7 +83,7 @@ def location_detail(data_c):
     if len(data_c) == 0:
         pass
     else:
-        # Deck í´ë˜ìŠ¤ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
+        # Deck Å¬·¡½º ÀÎ½ºÅÏ½º »ı¼º
         deck = pdk.Deck(height=100,
                         #width=1000,
                         map_style='mapbox://styles/mapbox/streets-v11', 
@@ -92,7 +92,7 @@ def location_detail(data_c):
                                                         zoom=12, 
                                                         pitch=50), 
                         layers=layers,
-                        tooltip={"text":"{ì£¼ì†Œ}\n{ìœ„ë„}/{ê²½ë„}"})
+                        tooltip={"text":"{ÁÖ¼Ò}\n{À§µµ}/{°æµµ}"})
 
         st.pydeck_chart(deck, use_container_width=True)
 
@@ -103,24 +103,24 @@ def location_detail(data_c):
 #     map_style=pdk.map_styles.ROAD,
 # )
 
-# [ gps ë°ì´í„°ì…‹ ê°±ì‹  ë° ëˆ„ì  í•¨ìˆ˜ ]--------------------------------------------------
+# [ gps µ¥ÀÌÅÍ¼Â °»½Å ¹× ´©Àû ÇÔ¼ö ]--------------------------------------------------
 def add_gps_all(gps):
-    # gps_all(ê¸°ì¡´) ë¶ˆëŸ¬ì˜¤ê¸°
+    # gps_all(±âÁ¸) ºÒ·¯¿À±â
     gps_all = pd.read_csv('gps_all.csv')
 
-    # gps_all(ê¸°ì¡´), gps(ì¶”ê°€ ê°±ì‹ ) ë°ì´í„°í”„ë ˆì„ ê²°í•© 
+    # gps_all(±âÁ¸), gps(Ãß°¡ °»½Å) µ¥ÀÌÅÍÇÁ·¹ÀÓ °áÇÕ 
     gps_all = pd.concat([gps_all,gps]).reset_index()
     gps_all = gps_all.drop('index',axis=1)
 
-    # ì¤‘ë³µ ìœ„ì¹˜ì •ë³´ ì œê±°
+    # Áßº¹ À§Ä¡Á¤º¸ Á¦°Å
     gps_all = gps_all.drop_duplicates()
 
-    # ì¶”ê°€ ìœ„ì¹˜ì •ë³´ ì €ì¥ëœ ë°ì´í„°í”„ë ˆì„ ì €ì¥
+    # Ãß°¡ À§Ä¡Á¤º¸ ÀúÀåµÈ µ¥ÀÌÅÍÇÁ·¹ÀÓ ÀúÀå
     gps_all.to_csv('gps_all.csv',index = False)
 
 
 
-# [ìœ„ë„,ê²½ë„ -> ì£¼ì†Œ ë³€í™˜ í•¨ìˆ˜]-----------------------------------------------------
+# [À§µµ,°æµµ -> ÁÖ¼Ò º¯È¯ ÇÔ¼ö]-----------------------------------------------------
 from geopy.geocoders import Nominatim
 
 def geocoding_reverse(lat_lng_str): 
@@ -129,50 +129,50 @@ def geocoding_reverse(lat_lng_str):
 
     return address
 
-# [ ì§€ì—­ êµ¬ë³„ ì£¼ì†Œ ë°ì´í„°í”„ë ˆì„ í•¨ìˆ˜ ]----------------------------------------------------
+# [ Áö¿ª ±¸º° ÁÖ¼Ò µ¥ÀÌÅÍÇÁ·¹ÀÓ ÇÔ¼ö ]----------------------------------------------------
 def createDF(gps_all):
-# ìœ„ë„,ê²½ë„ -> ì£¼ì†Œ ë³€í™˜
+# À§µµ,°æµµ -> ÁÖ¼Ò º¯È¯
     address_list = []
     for i in range(len(gps_all)):                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-        lat = gps_all['ìœ„ë„'][i]
-        lng = gps_all['ê²½ë„'][i]
+        lat = gps_all['À§µµ'][i]
+        lng = gps_all['°æµµ'][i]
         address = geocoding_reverse(f'{lat}, {lng}')
         
-        # ì¹´í…Œê³ ë¦¬ ì„ íƒ 
-        if option =='ëŒ€êµ¬ ì „ì²´':
+        # Ä«Å×°í¸® ¼±ÅÃ 
+        if option =='´ë±¸ ÀüÃ¼':
             address_list.append(address)
         elif option in address[0]:
             address_list.append(address)
 
-    df = pd.DataFrame(address_list, columns=['ì£¼ì†Œ','ìœ„ì¹˜ì •ë³´(ìœ„ë„,ê²½ë„)'])
+    df = pd.DataFrame(address_list, columns=['ÁÖ¼Ò','À§Ä¡Á¤º¸(À§µµ,°æµµ)'])
     
-    df_map = pd.DataFrame(columns=['ì£¼ì†Œ','ìœ„ë„','ê²½ë„'])
+    df_map = pd.DataFrame(columns=['ÁÖ¼Ò','À§µµ','°æµµ'])
     for i in range(len(df)):
-        df_map.loc[i] = [df.loc[i]['ì£¼ì†Œ'],df.loc[i][1][0],df.loc[i][1][1]]
+        df_map.loc[i] = [df.loc[i]['ÁÖ¼Ò'],df.loc[i][1][0],df.loc[i][1][1]]
 
-    # ìœ„ë„,ê²½ë„ ì£¼ì†Œë³€í™˜ ë°ì´í„°í”„ë ˆì„ ì‹œê°í™”
+    # À§µµ,°æµµ ÁÖ¼Òº¯È¯ µ¥ÀÌÅÍÇÁ·¹ÀÓ ½Ã°¢È­
     st.dataframe(df_map)
 
-    # í•´ë‹¹ ì§€ì—­ ìœ„ì¹˜ì •ë³´ ê°œìˆ˜ í‘œê¸°
-    st.write(option,'ì§€ì—­, ë³´ìˆ˜ê°€ í•„ìš”í•œ êµ¬ì—­: ',len(df_map),'ê°œ')
+    # ÇØ´ç Áö¿ª À§Ä¡Á¤º¸ °³¼ö Ç¥±â
+    st.write(option,'Áö¿ª, º¸¼ö°¡ ÇÊ¿äÇÑ ±¸¿ª: ',len(df_map),'°³')
     
     return df_map
 #---------------------------------------------------------------
 
-# [ ì§€ë„ í•¨ìˆ˜ ì‹¤í–‰ ì½”ë“œ ]------------------------------------------------------------------------
+# [ Áöµµ ÇÔ¼ö ½ÇÇà ÄÚµå ]------------------------------------------------------------------------
 
-# ì‹¤ì‹œê°„ ìœ„ì¹˜ì •ë³´ ìˆ˜ì§‘
-gps = geocoding()   # ì‹œì—°ìš©
-#gps = current_location()   # ì‹¤ì‹œê°„ì¢Œí‘œ
+# ½Ç½Ã°£ À§Ä¡Á¤º¸ ¼öÁı
+gps = geocoding()   # ½Ã¿¬¿ë
+#gps = current_location()   # ½Ç½Ã°£ÁÂÇ¥
 
-# ê¸°ì¡´ ìœ„ì¹˜ì •ë³´ ë°ì´í„°ì— ì‹¤ì‹œê°„ ìœ„ì¹˜ì •ë³´ ì¶”ê°€ ê°±ì‹ 
+# ±âÁ¸ À§Ä¡Á¤º¸ µ¥ÀÌÅÍ¿¡ ½Ç½Ã°£ À§Ä¡Á¤º¸ Ãß°¡ °»½Å
 add_gps_all(gps)
 
-# ìµœì¢… ìˆ˜ì •ëœ ì „ì²´ ìœ„ì¹˜ì •ë³´ íŒŒì¼ ë¶ˆëŸ¬ì˜¤ê¸°
+# ÃÖÁ¾ ¼öÁ¤µÈ ÀüÃ¼ À§Ä¡Á¤º¸ ÆÄÀÏ ºÒ·¯¿À±â
 gps_all = pd.read_csv('gps_all.csv')
 gps_all = gps_all.drop_duplicates()
-# ì£¼ì†Œ ë°ì´í„°í”„ë ˆì„ í‘œì‹œ
+# ÁÖ¼Ò µ¥ÀÌÅÍÇÁ·¹ÀÓ Ç¥½Ã
 df_map = createDF(gps_all) 
 
-# ì „ì²´ ìœ„ì¹˜ì •ë³´ ì›¹ ì§€ë„ì— í‘œì‹œ
+# ÀüÃ¼ À§Ä¡Á¤º¸ À¥ Áöµµ¿¡ Ç¥½Ã
 location_detail(df_map)
