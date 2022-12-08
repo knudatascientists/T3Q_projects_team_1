@@ -1,15 +1,15 @@
 import streamlit as st 
 
-# title ì“°ê¸°
-st.title('ì œëª© ì“°ì„¸ìš”')
-# ê·¸ëƒ¥ text ì“°ê¸° 
-st.write('ì•„ë¬´ê±°ë‚˜ ì“°ì„¸ìš”')
-# markdown tag ì“°ê³  ì‹¶ìœ¼ë©´
-st.markdown('<h1>íƒœê·¸ë¥¼ ì“¸ ìˆ˜ ìˆì–´ìš”</h1>')
-# user input ë°›ê¸° 
-st.text_input('ì‚¬ìš©ì ì…ë ¥ì„ ë°›ì•„ë³´ì„¸ìš”: ')
+# title ¾²±â
+st.title('Á¦¸ñ ¾²¼¼¿ä')
+# ±×³É text ¾²±â 
+st.write('¾Æ¹«°Å³ª ¾²¼¼¿ä')
+# markdown tag ¾²°í ½ÍÀ¸¸é
+st.markdown('<h1>ÅÂ±×¸¦ ¾µ ¼ö ÀÖ¾î¿ä</h1>')
+# user input ¹Ş±â 
+st.text_input('»ç¿ëÀÚ ÀÔ·ÂÀ» ¹Ş¾Æº¸¼¼¿ä: ')
 
-# ì´ì™¸ì—ë„ ë‹¤ì–‘í•œ ê¸°ëŠ¥ ì—„ì²­ ë§ë‹¤~ 
+# ÀÌ¿Ü¿¡µµ ´Ù¾çÇÑ ±â´É ¾öÃ» ¸¹´Ù~ 
 st.button 
 st.sidebar 
 
@@ -17,15 +17,15 @@ import requests
 import numpy as np
 
 def get_cctv_url(lat, lng):
-    # CCTV íƒìƒ‰ ë²”ìœ„ ì§€ì •ì„ ìœ„í•´ ì„ì˜ë¡œ Â±1 ë§Œí¼ ê°€ê°
+    # CCTV Å½»ö ¹üÀ§ ÁöÁ¤À» À§ÇØ ÀÓÀÇ·Î ¡¾1 ¸¸Å­ °¡°¨
     minX = str(lng-1)
     maxX = str(lng+1)
     minY = str(lat-1)
     maxY = str(lat+1)
 
-    # ê°œì¸key ì…ë ¥
+    # °³ÀÎkey ÀÔ·Â
     api_call = 'https://openapi.its.go.kr:9443/cctvInfo?' \
-               'apiKey=ê°œì¸key' \
+               'apiKey=°³ÀÎkey' \
                '&type=ex&cctvType=2' \
                '&minX=' + minX + \
                '&maxX=' + maxX + \
@@ -41,7 +41,7 @@ def get_cctv_url(lat, lng):
         xy_couple = (float(cctv_data[index]['coordy']),float(cctv_data[index]['coordx']))
         coordx_list.append(xy_couple)
 
-    # ì…ë ¥í•œ ìœ„ê²½ë„ ì¢Œí‘œì—ì„œ ê°€ì¥ ê°€ê¹Œìš´ ìœ„ì¹˜ì— ìˆëŠ” CCTVë¥¼ ì°¾ëŠ” ê³¼ì •
+    # ÀÔ·ÂÇÑ À§°æµµ ÁÂÇ¥¿¡¼­ °¡Àå °¡±î¿î À§Ä¡¿¡ ÀÖ´Â CCTV¸¦ Ã£´Â °úÁ¤
     coordx_list = np.array(coordx_list)
     leftbottom = np.array((lat, lng))
     distances = np.linalg.norm(coordx_list - leftbottom, axis=1)
@@ -51,5 +51,5 @@ def get_cctv_url(lat, lng):
 
 
 cctv_data = get_cctv_url(36.58629, 128.186793)
-print('CCTVëª…:', cctv_data['cctvname']) # ê°€ì¥ ê°€ê¹Œìš´ CCTVëª…
-print('CCTV ì˜ìƒ URL:', cctv_data['cctvurl']) # ê°€ì¥ ê°€ê¹Œìš´ CCTV ì˜ìƒ URL
+print('CCTV¸í:', cctv_data['cctvname']) # °¡Àå °¡±î¿î CCTV¸í
+print('CCTV ¿µ»ó URL:', cctv_data['cctvurl']) # °¡Àå °¡±î¿î CCTV ¿µ»ó URL

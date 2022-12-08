@@ -1,4 +1,4 @@
-# ëª¨ë“ˆ ë¡œë”©
+# ¸ğµâ ·Îµù
 import sqlite3, cv2
 import streamlit as st
 from PIL import Image, ImageEnhance
@@ -15,10 +15,10 @@ from st_aggrid.shared import GridUpdateMode
 import tempfile
 from streamlit.cli import main
 import time
-# ë ˆì´ì•„ì›ƒ ê´€ë ¨
+# ·¹ÀÌ¾Æ¿ô °ü·Ã
 st.set_page_config(layout="wide")
 
-# ë¡œê·¸ì¸ í™”ë©´
+# ·Î±×ÀÎ È­¸é
 conn = sqlite3.connect('database.db')
 c = conn.cursor()
 
@@ -51,27 +51,27 @@ def login_user(username, password):
 
 
 def main():
-    # st.title("ë¡œê·¸ì¸ ê¸°ëŠ¥ í…ŒìŠ¤íŠ¸")
+    # st.title("·Î±×ÀÎ ±â´É Å×½ºÆ®")
 
     menu = [ "signUp", "Login", "Dectection", "Map", 'LiveCam']
     choice = st.sidebar.selectbox("MENU", menu)
 
     if choice == "signUp":
-        st.subheader("ìƒˆ ê³„ì •ì„ ë§Œë“­ë‹ˆë‹¤")
-        new_user = st.text_input("ìœ ì €ëª…ì„ ì…ë ¥í•´ì£¼ì„¸ìš”")
-        new_password = st.text_input("ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”", type='password')
+        st.subheader("»õ °èÁ¤À» ¸¸µì´Ï´Ù")
+        new_user = st.text_input("À¯Àú¸íÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä")
+        new_password = st.text_input("ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä", type='password')
 
         if st.button("signUp"):
             create_user()
             add_user(new_user, make_hashes(new_password))
-            st.success("ê³„ì • ìƒì„±ì— ì„±ê³µí–ˆìŠµë‹ˆë‹¤.")
-            st.info("ë¡œê·¸ì¸ í™”ë©´ì—ì„œ ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”.")
+            st.success("°èÁ¤ »ı¼º¿¡ ¼º°øÇß½À´Ï´Ù.")
+            st.info("·Î±×ÀÎ È­¸é¿¡¼­ ·Î±×ÀÎ ÇØÁÖ¼¼¿ä.")
 
     elif choice == "Login":
-        st.subheader("ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”")
+        st.subheader("·Î±×ÀÎ ÇØÁÖ¼¼¿ä")
 
-        username = st.text_input("ìœ ì €ëª…ì„ ì…ë ¥í•´ì£¼ì„¸ìš”")
-        password = st.text_input("ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”", type='password')
+        username = st.text_input("À¯Àú¸íÀ» ÀÔ·ÂÇØÁÖ¼¼¿ä")
+        password = st.text_input("ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä", type='password')
         if st.button("Login"):
             create_user()
             hashed_pswd = make_hashes(password)
@@ -79,18 +79,18 @@ def main():
             result = login_user(username, check_hashes(password, hashed_pswd))
             if result:
 
-                st.success("{}ë‹˜ìœ¼ë¡œ ë¡œê·¸ì¸í–ˆìŠµë‹ˆë‹¤.".format(username))
+                st.success("{}´ÔÀ¸·Î ·Î±×ÀÎÇß½À´Ï´Ù.".format(username))
 
             else:
-                st.warning("ì‚¬ìš©ì ì´ë¦„ì´ë‚˜ ë¹„ë°€ë²ˆí˜¸ê°€ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤.")        
+                st.warning("»ç¿ëÀÚ ÀÌ¸§ÀÌ³ª ºñ¹Ğ¹øÈ£°¡ Àß¸øµÇ¾ú½À´Ï´Ù.")        
 
 
-    # Detection íƒ­
+    # Detection ÅÇ
     elif choice == "Dectection":
-        st.header('ìœ„í—˜ë¬¼ íƒì§€')
+        st.header('À§Çè¹° Å½Áö')
         selected_item = st.sidebar.radio("select", ("Image", "Video"))
         st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-        # Image ì—…ë¡œë“œ íƒ­
+        # Image ¾÷·Îµå ÅÇ
         if selected_item == "Image":
             file = st.file_uploader("Upload Image", type=['jpg', 'png', 'jpeg'])
             if file != None:
@@ -98,7 +98,7 @@ def main():
                 img = Image.open(file)
                 img.save('./temp/temp.png', 'PNG')
                 with col1:
-                    html='<h2>ì›ë³¸ ì´ë¯¸ì§€<h2>'
+                    html='<h2>¿øº» ÀÌ¹ÌÁö<h2>'
                     st.components.v1.html(html="<center>" + html + "</center>", height=48)
                     st.image(img)
                 with col2:
@@ -108,28 +108,28 @@ def main():
                     st.header('    ')
                     st.header('    ')
                     st.header('    ')
-                    if st.button("ì¶”ë¡  ê²°ê³¼"):
+                    if st.button("Ãß·Ğ °á°ú"):
                         with st.empty():
                             for seconds in range(1):
-                                st.components.v1.html(html="<center>" +'â³' + "</center>")
+                                st.components.v1.html(html="<center>" +'?' + "</center>")
                                 time.sleep(1)
-                            st.components.v1.html(html="<center>" +'âœ”ï¸' + "</center>")                                                
+                            st.components.v1.html(html="<center>" +'??' + "</center>")                                                
                             img_result, video_result = detect.run(source=f'./temp/temp.png')
                         with col3:
-                            html='<h2>íƒì§€ëœ ì´ë¯¸ì§€<h2>'
+                            html='<h2>Å½ÁöµÈ ÀÌ¹ÌÁö<h2>'
                             st.components.v1.html(html="<center>" + html + "</center>", height=48)
                             st.image(img_result)
-        # Video ì—…ë¡œë“œ íƒ­
+        # Video ¾÷·Îµå ÅÇ
         elif selected_item == "Video":
-            #html='<h3>ì˜ìƒì„ ì„ íƒí•´ì£¼ì„¸ìš”<h3>'
+            #html='<h3>¿µ»óÀ» ¼±ÅÃÇØÁÖ¼¼¿ä<h3>'
             #st.components.v1.html(html=html, height=50)
-            selected_video = st.radio(label='ì˜ìƒì„ ì„ íƒí•´ì£¼ì„¸ìš”', options=['1', '2', '3', '4'])
+            selected_video = st.radio(label='¿µ»óÀ» ¼±ÅÃÇØÁÖ¼¼¿ä', options=['1', '2', '3', '4'])
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
             col1, col2, col3 = st.columns([4.3,0.8,4.3])
             
             if selected_video == "1":
                 with col1:
-                    html='<h2>ì›ë³¸ ì˜ìƒ<h2>'
+                    html='<h2>¿øº» ¿µ»ó<h2>'
                     st.components.v1.html(html="<center>" + html + "</center>", height=48)           
                     st.video('./temp/temp_1.mp4', start_time=0)
                 with col2:
@@ -140,21 +140,21 @@ def main():
                     st.header('    ')
                     st.header('    ')
                 with col2:
-                    #m = st.markdown("""<div style=" text-align: center;"> <button style=" display: inline-block;">ë²„íŠ¼í´ë¦­!!</button> </div>""", unsafe_allow_html=True)
-                    if st.button("ì¶”ë¡ ê²°ê³¼"):  
+                    #m = st.markdown("""<div style=" text-align: center;"> <button style=" display: inline-block;">¹öÆ°Å¬¸¯!!</button> </div>""", unsafe_allow_html=True)
+                    if st.button("Ãß·Ğ°á°ú"):  
                         with st.empty():
                             for seconds in range(1):
-                                st.components.v1.html(html="<center>" +'â³' + "</center>")
+                                st.components.v1.html(html="<center>" +'?' + "</center>")
                                 time.sleep(1)
-                            st.components.v1.html(html="<center>" +'âœ”ï¸' + "</center>")                            
+                            st.components.v1.html(html="<center>" +'??' + "</center>")                            
                     # img_result, video_result = detect.run(source=f'./temp/temp_1_result.mp4')
                         with col3: 
-                            html='<h2>íƒì§€ëœ ì˜ìƒ<h2>'
+                            html='<h2>Å½ÁöµÈ ¿µ»ó<h2>'
                             st.components.v1.html(html="<center>" + html + "</center>", height=48) 
                             st.video('./temp/temp_1_result.mp4', 'rb', start_time=0)
             elif selected_video == "2":
                 with col1:
-                    html='<h2>ì›ë³¸ ì˜ìƒ<h2>'
+                    html='<h2>¿øº» ¿µ»ó<h2>'
                     st.components.v1.html(html="<center>" + html + "</center>", height=48)           
                     st.video('./temp/temp_1.mp4', start_time=0)
                 with col2:
@@ -165,20 +165,20 @@ def main():
                     st.header('    ')
                     st.header('    ')
                 with col2:
-                    if st.button("ì¶”ë¡ ê²°ê³¼"):  
+                    if st.button("Ãß·Ğ°á°ú"):  
                         with st.empty():
                             for seconds in range(1):
-                                st.components.v1.html(html="<center>" +'â³' + "</center>")
+                                st.components.v1.html(html="<center>" +'?' + "</center>")
                                 time.sleep(1)
-                            st.components.v1.html(html="<center>" +'âœ”ï¸' + "</center>") 
+                            st.components.v1.html(html="<center>" +'??' + "</center>") 
                     # img_result, video_result = detect.run(source=f'./temp/temp_1_result.mp4')
                         with col3: 
-                            html='<h2>íƒì§€ëœ ì˜ìƒ<h2>'
+                            html='<h2>Å½ÁöµÈ ¿µ»ó<h2>'
                             st.components.v1.html(html="<center>" + html + "</center>", height=48) 
                             st.video('./temp/temp_1_result.mp4', 'rb', start_time=0)
             elif selected_video == "3":
                 with col1:
-                    html='<h2>ì›ë³¸ ì˜ìƒ<h2>'
+                    html='<h2>¿øº» ¿µ»ó<h2>'
                     st.components.v1.html(html="<center>" + html + "</center>", height=48)           
                     st.video('./temp/temp_1.mp4', start_time=0)
                 with col2:
@@ -189,20 +189,20 @@ def main():
                     st.header('    ')
                     st.header('    ')
                 with col2:
-                    if st.button("ì¶”ë¡ ê²°ê³¼"):  
+                    if st.button("Ãß·Ğ°á°ú"):  
                         with st.empty():
                             for seconds in range(1):
-                                st.components.v1.html(html="<center>" +'â³' + "</center>")
+                                st.components.v1.html(html="<center>" +'?' + "</center>")
                                 time.sleep(1)
-                            st.components.v1.html(html="<center>" +'âœ”ï¸' + "</center>") 
+                            st.components.v1.html(html="<center>" +'??' + "</center>") 
                     # img_result, video_result = detect.run(source=f'./temp/temp_1_result.mp4')
                         with col3: 
-                            html='<h2>íƒì§€ëœ ì˜ìƒ<h2>'
+                            html='<h2>Å½ÁöµÈ ¿µ»ó<h2>'
                             st.components.v1.html(html="<center>" + html + "</center>", height=48) 
                             st.video('./temp/temp_1_result.mp4', 'rb', start_time=0)         
             elif selected_video == "4":
                 with col1:
-                    html='<h2>ì›ë³¸ ì˜ìƒ<h2>'
+                    html='<h2>¿øº» ¿µ»ó<h2>'
                     st.components.v1.html(html="<center>" + html + "</center>", height=48)           
                     st.video('./temp/temp_1.mp4', start_time=0)
                 with col2:
@@ -213,15 +213,15 @@ def main():
                     st.header('    ')
                     st.header('    ')
                 with col2:
-                    if st.button("ì¶”ë¡ ê²°ê³¼"):  
+                    if st.button("Ãß·Ğ°á°ú"):  
                         with st.empty():
                             for seconds in range(1):
-                                st.components.v1.html(html="<center>" +'â³' + "</center>")
+                                st.components.v1.html(html="<center>" +'?' + "</center>")
                                 time.sleep(1)
-                            st.components.v1.html(html="<center>" +'âœ”ï¸' + "</center>") 
+                            st.components.v1.html(html="<center>" +'??' + "</center>") 
                     # img_result, video_result = detect.run(source=f'./temp/temp_1_result.mp4')
                         with col3: 
-                            html='<h2>íƒì§€ëœ ì˜ìƒ<h2>'
+                            html='<h2>Å½ÁöµÈ ¿µ»ó<h2>'
                             st.components.v1.html(html="<center>" + html + "</center>", height=48) 
                             st.video('./temp/temp_1_result.mp4', 'rb', start_time=0)
     elif choice == "LiveCam":
@@ -241,36 +241,36 @@ def main():
 
     elif choice == "Map":
         option = st.sidebar.selectbox(
-            'ì–´ë–¤ ì§€ì—­ì„ ê³ ë¥´ì‹œê² ìŠµë‹ˆê¹Œ?',
-            ('ëŒ€êµ¬ ì „ì²´','ë¶êµ¬', 'ì¤‘êµ¬', 'ì„œêµ¬', 'ë™êµ¬',"ë‚¨êµ¬", "ìˆ˜ì„±êµ¬", "ë‹¬ì„œêµ¬", "ë‹¬ì„±êµ°"))   
+            '¾î¶² Áö¿ªÀ» °í¸£½Ã°Ú½À´Ï±î?',
+            ('´ë±¸ ÀüÃ¼','ºÏ±¸', 'Áß±¸', '¼­±¸', 'µ¿±¸',"³²±¸", "¼ö¼º±¸", "´Ş¼­±¸", "´Ş¼º±º"))   
         
-        # í˜„ì¬ìœ„ì¹˜ ì¢Œí‘œ ì–»ê¸°
+        # ÇöÀçÀ§Ä¡ ÁÂÇ¥ ¾ò±â
         def current_location():
             here_req = requests.get("http://www.geoplugin.net/json.gp")
 
             if (here_req.status_code != 200):
-                print("í˜„ì¬ì¢Œí‘œë¥¼ ë¶ˆëŸ¬ì˜¬ ìˆ˜ ì—†ìŒ")
+                print("ÇöÀçÁÂÇ¥¸¦ ºÒ·¯¿Ã ¼ö ¾øÀ½")
             else:
                 location = json.loads(here_req.text)
                 crd = {float(location["geoplugin_latitude"]), float(location["geoplugin_longitude"])}
                 crd = list(crd)
-                gps = pd.DataFrame([[crd[1], crd[0]]], columns=['ìœ„ë„', 'ê²½ë„'])
+                gps = pd.DataFrame([[crd[1], crd[0]]], columns=['À§µµ', '°æµµ'])
             return gps
-        #ì‹¤ì‹œê°„ ìœ„ì¹˜ì •ë³´ ìˆ˜ì§‘(ì‹œì—°ìš©) - ê²½ë¶ëŒ€í•™êµ
+        #½Ç½Ã°£ À§Ä¡Á¤º¸ ¼öÁı(½Ã¿¬¿ë) - °æºÏ´ëÇĞ±³
         def geocoding():
             geolocoder = Nominatim(user_agent = 'South Korea', timeout=None)
-            geo = geolocoder.geocode("ëŒ€êµ¬ ë¶êµ¬ ê²½ë¶ëŒ€í•™êµ ê¸€ë¡œë²Œí”Œë¼ì")
+            geo = geolocoder.geocode("´ë±¸ ºÏ±¸ °æºÏ´ëÇĞ±³ ±Û·Î¹úÇÃ¶óÀÚ")
             crd = {"lat": str(geo.latitude), "lng": str(geo.longitude)}
-            gps = pd.DataFrame( [[crd['lat'],crd['lng']]], columns=['ìœ„ë„','ê²½ë„'])
+            gps = pd.DataFrame( [[crd['lat'],crd['lng']]], columns=['À§µµ','°æµµ'])
             return gps
-        # ë§µì— ìœ„ì¹˜ í‘œì‹œ ------------------------------------------------------------------------------------------
+        # ¸Ê¿¡ À§Ä¡ Ç¥½Ã ------------------------------------------------------------------------------------------
 
-        # ìœ„ì¹˜ì •ë³´ ìƒì„¸ (ë‹¨, dataì— ìœ„ë„, ê²½ë„ ì»¬ëŸ¼ì´ ìˆì–´ì•¼ í•¨)
+        # À§Ä¡Á¤º¸ »ó¼¼ (´Ü, data¿¡ À§µµ, °æµµ ÄÃ·³ÀÌ ÀÖ¾î¾ß ÇÔ)
 
         def location_detail(data_c):
             data = data_c.copy()
 
-            # ì•„ì´ì½˜ ì´ë¯¸ì§€ ë¶ˆëŸ¬ì˜¤ê¸°
+            # ¾ÆÀÌÄÜ ÀÌ¹ÌÁö ºÒ·¯¿À±â
             ICON_URL = "https://cdn-icons-png.flaticon.com/512/2711/2711648.png"
             icon_data = {
                 # Icon from Wikimedia, used the Creative Commons Attribution-Share Alike 3.0
@@ -283,7 +283,7 @@ def main():
             data["icon_data"] = None
             for i in data.index:
                 data["icon_data"][i] = icon_data
-            la, lo = np.mean(data["ìœ„ë„"]), np.mean(data["ê²½ë„"])
+            la, lo = np.mean(data["À§µµ"]), np.mean(data["°æµµ"])
 
             layers = [
                 pdk.Layer(
@@ -292,7 +292,7 @@ def main():
                     get_icon="icon_data",
                     get_size=4,
                     size_scale=15,
-                    get_position="[ê²½ë„, ìœ„ë„]",
+                    get_position="[°æµµ, À§µµ]",
                     pickable=True,
                 )
             ]
@@ -301,7 +301,7 @@ def main():
             if len(data_c) == 0:
                 pass
             else:
-                # Deck í´ë˜ìŠ¤ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
+                # Deck Å¬·¡½º ÀÎ½ºÅÏ½º »ı¼º
                 deck = pdk.Deck(height=100,
                                 #width=1000,
                                 map_style='road', 
@@ -310,76 +310,76 @@ def main():
                                                                 zoom=12, 
                                                                 pitch=50), 
                                 layers=layers,
-                                tooltip={"text":"{ì£¼ì†Œ}\n{ìœ„ë„}/{ê²½ë„}"})
+                                tooltip={"text":"{ÁÖ¼Ò}\n{À§µµ}/{°æµµ}"})
 
                 st.pydeck_chart(deck, use_container_width=True)
                 
-        # [ gps ë°ì´í„°ì…‹ ê°±ì‹  ë° ëˆ„ì  í•¨ìˆ˜ ]--------------------------------------------------
+        # [ gps µ¥ÀÌÅÍ¼Â °»½Å ¹× ´©Àû ÇÔ¼ö ]--------------------------------------------------
         def add_gps_all(gps):
-            # gps_all(ê¸°ì¡´) ë¶ˆëŸ¬ì˜¤ê¸°
+            # gps_all(±âÁ¸) ºÒ·¯¿À±â
             gps_all = pd.read_csv('gps_all.csv')
 
-            # gps_all(ê¸°ì¡´), gps(ì¶”ê°€ ê°±ì‹ ) ë°ì´í„°í”„ë ˆì„ ê²°í•© 
+            # gps_all(±âÁ¸), gps(Ãß°¡ °»½Å) µ¥ÀÌÅÍÇÁ·¹ÀÓ °áÇÕ 
             gps_all = pd.concat([gps_all,gps]).reset_index()
             gps_all = gps_all.drop('index',axis=1)
 
-            # ì¤‘ë³µ ìœ„ì¹˜ì •ë³´ ì œê±°
-            gps_all = gps_all.drop_duplicates(['ìœ„ë„','ê²½ë„'])
+            # Áßº¹ À§Ä¡Á¤º¸ Á¦°Å
+            gps_all = gps_all.drop_duplicates(['À§µµ','°æµµ'])
 
-            # ì¶”ê°€ ìœ„ì¹˜ì •ë³´ ì €ì¥ëœ ë°ì´í„°í”„ë ˆì„ ì €ì¥
+            # Ãß°¡ À§Ä¡Á¤º¸ ÀúÀåµÈ µ¥ÀÌÅÍÇÁ·¹ÀÓ ÀúÀå
             gps_all.to_csv('gps_all.csv',index = False)
             
-        # [ìœ„ë„,ê²½ë„ -> ì£¼ì†Œ ë³€í™˜ í•¨ìˆ˜]-----------------------------------------------------    
+        # [À§µµ,°æµµ -> ÁÖ¼Ò º¯È¯ ÇÔ¼ö]-----------------------------------------------------    
         def geocoding_reverse(lat_lng_str): 
             geolocoder = Nominatim(user_agent = 'South Korea', timeout=None)
             address = geolocoder.reverse(lat_lng_str)
 
             return address            
                 
-        # [ ì§€ì—­ êµ¬ë³„ ì£¼ì†Œ ë°ì´í„°í”„ë ˆì„ í•¨ìˆ˜ ]----------------------------------------------------
+        # [ Áö¿ª ±¸º° ÁÖ¼Ò µ¥ÀÌÅÍÇÁ·¹ÀÓ ÇÔ¼ö ]----------------------------------------------------
         def createDF(gps_all):
-        # ìœ„ë„,ê²½ë„ -> ì£¼ì†Œ ë³€í™˜
+        # À§µµ,°æµµ -> ÁÖ¼Ò º¯È¯
             address_list = []
             for i in range(len(gps_all)):
 
-                lat = gps_all['ìœ„ë„'][i]
-                lng = gps_all['ê²½ë„'][i]
+                lat = gps_all['À§µµ'][i]
+                lng = gps_all['°æµµ'][i]
                 address = geocoding_reverse(f'{lat}, {lng}')
 
-                # ì¹´í…Œê³ ë¦¬ ì„ íƒ 
-                if option =='ëŒ€êµ¬ ì „ì²´':
+                # Ä«Å×°í¸® ¼±ÅÃ 
+                if option =='´ë±¸ ÀüÃ¼':
                     address_list.append(address)
                 elif option in address[0]:
                     address_list.append(address)
 
-            df = pd.DataFrame(address_list, columns=['ì£¼ì†Œ','ìœ„ì¹˜ì •ë³´(ìœ„ë„,ê²½ë„)'])
+            df = pd.DataFrame(address_list, columns=['ÁÖ¼Ò','À§Ä¡Á¤º¸(À§µµ,°æµµ)'])
 
-            df_map = pd.DataFrame(columns=['ì£¼ì†Œ','ìœ„ë„','ê²½ë„'])
+            df_map = pd.DataFrame(columns=['ÁÖ¼Ò','À§µµ','°æµµ'])
             for i in range(len(df)):
-                df_map.loc[i] = [df.loc[i]['ì£¼ì†Œ'],df.loc[i][1][0],df.loc[i][1][1]]
+                df_map.loc[i] = [df.loc[i]['ÁÖ¼Ò'],df.loc[i][1][0],df.loc[i][1][1]]
 
-            # ìœ„ë„,ê²½ë„ ì£¼ì†Œë³€í™˜ ë°ì´í„°í”„ë ˆì„ ì‹œê°í™”
+            # À§µµ,°æµµ ÁÖ¼Òº¯È¯ µ¥ÀÌÅÍÇÁ·¹ÀÓ ½Ã°¢È­
             # st.dataframe(df)
 
-            # í•´ë‹¹ ì§€ì—­ ìœ„ì¹˜ì •ë³´ ê°œìˆ˜ í‘œê¸°
-            st.write(option,'ì§€ì—­, ë³´ìˆ˜ê°€ í•„ìš”í•œ êµ¬ì—­: ',len(df),'ê°œ')
+            # ÇØ´ç Áö¿ª À§Ä¡Á¤º¸ °³¼ö Ç¥±â
+            st.write(option,'Áö¿ª, º¸¼ö°¡ ÇÊ¿äÇÑ ±¸¿ª: ',len(df),'°³')
 
             return df_map                
 
-        # [ ì§€ë„ í•¨ìˆ˜ ì‹¤í–‰ ì½”ë“œ ]------------------------------------------------------------------------
+        # [ Áöµµ ÇÔ¼ö ½ÇÇà ÄÚµå ]------------------------------------------------------------------------
 ##############
-        if st.sidebar.button('í˜„ì¬ ìœ„ì¹˜ ì¶”ê°€'):
-        # ì‹¤ì‹œê°„ ìœ„ì¹˜ì •ë³´ ìˆ˜ì§‘
+        if st.sidebar.button('ÇöÀç À§Ä¡ Ãß°¡'):
+        # ½Ç½Ã°£ À§Ä¡Á¤º¸ ¼öÁı
             gps=geocoding()
-            # ê¸°ì¡´ ìœ„ì¹˜ì •ë³´ë°ì´í„°ì— ì‹¤ì‹œê°„ ìœ„ì¹˜ì •ë³´ ì¶”ê°€ ê°±ì‹ 
+            # ±âÁ¸ À§Ä¡Á¤º¸µ¥ÀÌÅÍ¿¡ ½Ç½Ã°£ À§Ä¡Á¤º¸ Ãß°¡ °»½Å
             add_gps_all(gps)
 
-        # ìµœì¢… ìˆ˜ì •ëœ ì „ì²´ ìœ„ì¹˜ì •ë³´ íŒŒì¼ ë¶ˆëŸ¬ì˜¤ê¸°
+        # ÃÖÁ¾ ¼öÁ¤µÈ ÀüÃ¼ À§Ä¡Á¤º¸ ÆÄÀÏ ºÒ·¯¿À±â
         gps_all = pd.read_csv('gps_all.csv')
 
-        # ì£¼ì†Œ ë°ì´í„°í”„ë ˆì„ í‘œì‹œ
+        # ÁÖ¼Ò µ¥ÀÌÅÍÇÁ·¹ÀÓ Ç¥½Ã
         df_map = createDF(gps_all) 
-        # ì „ì²´ ìœ„ì¹˜ì •ë³´ ì›¹ ì§€ë„ì— í‘œì‹œ
+        # ÀüÃ¼ À§Ä¡Á¤º¸ À¥ Áöµµ¿¡ Ç¥½Ã
         location_detail(df_map)
         
         def aggrid_interactive_table(df):
@@ -404,28 +404,28 @@ def main():
             selection = aggrid_interactive_table(df_map)
             try:
                 if selection:
-                # df ìœ„/ê²½ë„ ë½‘ê¸°
-                    #st.write("ë³´ìˆ˜ê°€ í•„ìš”í•œ í¬íŠ¸í™€")
-                    #st.write('ìœ„ë„: ', selection['selected_rows'][0]['ìœ„ë„'], 'ê²½ë„: ', selection['selected_rows'][0]['ê²½ë„'])
-                    if selection['selected_rows'][0]['ìœ„ë„'] == 35.812507:
+                # df À§/°æµµ »Ì±â
+                    #st.write("º¸¼ö°¡ ÇÊ¿äÇÑ Æ÷Æ®È¦")
+                    #st.write('À§µµ: ', selection['selected_rows'][0]['À§µµ'], '°æµµ: ', selection['selected_rows'][0]['°æµµ'])
+                    if selection['selected_rows'][0]['À§µµ'] == 35.812507:
                         img=Image.open(r'.\result\1.jpg')
                         st.image(img)
-                    if selection['selected_rows'][0]['ìœ„ë„'] == 35.832596089:
+                    if selection['selected_rows'][0]['À§µµ'] == 35.832596089:
                         img=Image.open(r'.\result\2.jpg')
                         st.image(img)
-                    if selection['selected_rows'][0]['ìœ„ë„'] == 35.88249341:
+                    if selection['selected_rows'][0]['À§µµ'] == 35.88249341:
                         img=Image.open(r'.\result\3.jpg')
                         st.image(img)
-                    if selection['selected_rows'][0]['ìœ„ë„'] == 35.86262305:
+                    if selection['selected_rows'][0]['À§µµ'] == 35.86262305:
                         img=Image.open(r'.\result\4.jpg')
                         st.image(img)
-                    if selection['selected_rows'][0]['ìœ„ë„'] == 35.8428000942:
+                    if selection['selected_rows'][0]['À§µµ'] == 35.8428000942:
                         img=Image.open(r'.\result\5.jpg')
                         st.image(img)
-                    if selection['selected_rows'][0]['ìœ„ë„'] == 35.8723688469:
+                    if selection['selected_rows'][0]['À§µµ'] == 35.8723688469:
                         img=Image.open(r'.\result\7.jpg')
                         st.image(img)
-                    if selection['selected_rows'][0]['ìœ„ë„'] == 35.8920472:
+                    if selection['selected_rows'][0]['À§µµ'] == 35.8920472:
                         img=Image.open(r'.\result\8.jpg')
                         st.image(img)
             except:
