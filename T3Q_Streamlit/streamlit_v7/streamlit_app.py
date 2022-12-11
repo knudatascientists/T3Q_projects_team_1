@@ -67,6 +67,7 @@ def main():
             add_user(new_user, make_hashes(new_password))
             st.success("계정 생성에 성공했습니다.")
             st.info("로그인 화면에서 로그인 해주세요.")
+            st.balloons() 
 
     elif choice == "📌 로그인":
         st.subheader("로그인 해주세요")
@@ -81,6 +82,7 @@ def main():
             if result:
 
                 st.success("{}님으로 로그인했습니다.".format(username))
+                st.balloons() 
 
             else:
                 st.warning("사용자 이름이나 비밀번호가 잘못되었습니다.")        
@@ -243,7 +245,7 @@ def main():
     elif choice == "🗺️ 포트홀 등 도로손상 현황":
         option = st.sidebar.selectbox(
             '어떤 지역을 고르시겠습니까?',
-            ('대구 전체','북구', '중구', '서구', '동구',"남구", "수성구", "달서구", "달성군"))   
+            ('대구 전체','북구', '중구', '서구', '동구',"남구", "수성구", "달서구", "달성군"))
         
         # 현재위치 좌표 얻기
         def current_location():
@@ -293,12 +295,41 @@ def main():
                     get_icon="icon_data",
                     get_size=4,
                     size_scale=15,
-                    get_position="[경도, 위도]",
+                    get_position=['경도', '위도'],
                     pickable=True,
+                    auto_highlight=True,
+                    extruded=True
                 )
             ]
-            
-            
+            view_state = pdk.ViewState(longitude=lo, 
+                                        latitude=la, 
+                                        zoom=12, 
+                                        pitch=50)
+            # ============================================================================================================
+            # Ag-Grid
+            col1, col2 = st.columns(2)
+            with col1:
+                
+                selection = aggrid_interactive_table(df_map)
+            with col2:
+                try:
+                    if selection:
+                        # st.write(selection["selected_rows"][0]["_selectedRowNodeInfo"]["nodeRowIndex"])
+                        img=Image.open(f'./result/{int(selection["selected_rows"][0]["_selectedRowNodeInfo"]["nodeRowIndex"])}.jpg')
+                        img = img.resize((500, 200))
+                        st.image(img, use_column_width=True)
+                        
+                        view_state = pdk.ViewState(longitude=selection['selected_rows'][0]['경도'], 
+                                            latitude=selection['selected_rows'][0]['위도'], 
+                                            zoom=17, 
+                                            pitch=50)
+                        deck.initial_view_state = view_state
+                        deck.update()
+
+                        
+                except:
+                    pass
+            # ============================================================================================================
             if len(data_c) == 0:
                 pass
             else:
@@ -306,14 +337,12 @@ def main():
                 deck = pdk.Deck(height=100,
                                 #width=1000,
                                 map_style='road', 
-                                initial_view_state=pdk.ViewState(longitude=lo, 
-                                                                latitude=la, 
-                                                                zoom=12, 
-                                                                pitch=50), 
+                                initial_view_state=view_state, 
                                 layers=layers,
                                 tooltip={"text":"{주소}\n{위도}/{경도}"})
-
+                
                 st.pydeck_chart(deck, use_container_width=True)
+                
                 
         # [ gps 데이터셋 갱신 및 누적 함수 ]--------------------------------------------------
         def add_gps_all(gps):
@@ -365,7 +394,26 @@ def main():
             # 해당 지역 위치정보 개수 표기
             st.write(option,'지역, 보수가 필요한 구역: ',len(df),'개')
 
-            return df_map                
+            return df_map
+        
+        # 데이터프레임 상호작용 함수
+        def aggrid_interactive_table(df):
+            options = GridOptionsBuilder.from_dataframe(
+                df,  enableRowGroup=True, enableValue=True, enablePivot=True
+            )
+            options.configure_side_bar()
+
+            options.configure_selection('single')
+            selection = AgGrid(
+                df,
+                enable_enterprise_modules=True,
+                gridOptions=options.build(),
+                update_mode=GridUpdateMode.MODEL_CHANGED,
+                allow_unsafe_jscode=True,
+                height=300
+            )
+
+            return selection
 
         # [ 지도 함수 실행 코드 ]------------------------------------------------------------------------
 ##############
@@ -382,39 +430,6 @@ def main():
         df_map = createDF(gps_all) 
         # 전체 위치정보 웹 지도에 표시
         location_detail(df_map)
-        
-        def aggrid_interactive_table(df):
-            options = GridOptionsBuilder.from_dataframe(
-                df,  enableRowGroup=True, enableValue=True, enablePivot=True
-            )
-            options.configure_side_bar()
-
-            options.configure_selection('single')
-            selection = AgGrid(
-                df,
-                enable_enterprise_modules=True,
-                gridOptions=options.build(),
-                update_mode=GridUpdateMode.MODEL_CHANGED,
-                allow_unsafe_jscode=True,
-            )
-
-            return selection
-
-        col1, col2 = st.columns(2)
-        with col1:
-            selection = aggrid_interactive_table(df_map)
-            try:
-                if selection:
-                # df 위/경도 뽑기
-                    #st.write("보수가 필요한 포트홀")
-                    #st.write('위도: ', selection['selected_rows'][0]['위도'], '경도: ', selection['selected_rows'][0]['경도'])
-                    for i in range(1,56):
-                        if selection['selected_rows'][i-1]['위도'] == gps_all.iloc[i-1][0]:
-                            img=Image.open(f"./result/{os.listdir('./result/')[i]}")
-                            st.image(img)
-                            
-            except:
-                pass
-
+    
 if __name__ == '__main__':
     main()
