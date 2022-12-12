@@ -50,29 +50,29 @@ def login_user(username, password):
     data = c.fetchall()
     return data
 
+# st.sidebar("WO 이륜차 위험물 감지 서비스")
 
 def main():
-    # st.title("로그인 기능 테스트")
-
-    menu = [ "회원가입", "📌 로그인", "⚠️ Dectection", "🗺️ 포트홀 등 도로손상 현황", 'LiveCam']
+    st.sidebar.title('WO-T3Q1')
+    menu = [ "📎 회원가입", "📌 로그인", "⚠️ Dectection", "🗺️ WO Map"]
     choice = st.sidebar.selectbox("MENU", menu)
 
-    if choice == "회원가입":
-        st.subheader("새 계정을 만듭니다")
+    if choice == "📎 회원가입":
+        st.subheader("📎 새 계정을 만듭니다")
         new_user = st.text_input("유저명을 입력해주세요")
         new_password = st.text_input("비밀번호를 입력해주세요", type='password')
 
         if st.button("signUp"):
             create_user()
             add_user(new_user, make_hashes(new_password))
-            st.success("계정 생성에 성공했습니다.")
+            st.success("Watch Out 서비스를 이용해주셔서 감사합니다.")
             st.info("로그인 화면에서 로그인 해주세요.")
             st.balloons() 
 
     elif choice == "📌 로그인":
-        st.subheader("로그인 해주세요")
+        st.subheader("📌 로그인 해주세요")
 
-        username = st.text_input("유저명을 입력해주세요")
+        username = st.text_input("ID를 입력해주세요")
         password = st.text_input("비밀번호를 입력해주세요", type='password')
         if st.button("Login"):
             create_user()
@@ -90,18 +90,19 @@ def main():
 
     # Detection 탭
     elif choice == "⚠️ Dectection":
-        st.header('⚠ 도로 위 위험물 탐지 ⚠')
-        selected_item = st.sidebar.radio("select", ("Image", "Video"))
+        st.header('⚠️ 도로 주행 중 위험물 탐지')
+        selected_item = st.sidebar.radio("select", ("📸 Image Detection", "📹 Video Detection"))
         st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
         # Image 업로드 탭
-        if selected_item == "Image":
+        if selected_item == "📸 Image Detection":
+            st.info('📸 Image Detection')
             file = st.file_uploader("사진을 업로드하세요", type=['jpg', 'png', 'jpeg'])
             if file != None:
                 col1, col2, col3 = st.columns([4,0.8,4])
                 img = Image.open(file)
                 img.save('./temp/temp.png', 'PNG')
                 with col1:
-                    html='<h2>원본 이미지<h2>'
+                    html='<h2>원본 사진<h2>'
                     st.components.v1.html(html="<center>" + html + "</center>", height=48)
                     st.image(img)
                 with col2:
@@ -119,11 +120,12 @@ def main():
                             st.components.v1.html(html="<center>" +'✔️' + "</center>")                                                
                             img_result, video_result = detect.run(source=f'./temp/temp.png')
                         with col3:
-                            html='<h2>탐지된 이미지<h2>'
+                            html='<h2>위험물 탐지<h2>'
                             st.components.v1.html(html="<center>" + html + "</center>", height=48)
                             st.image(img_result)
         # Video 업로드 탭
-        elif selected_item == "Video":
+        elif selected_item == "📹 Video Detection":
+            st.info('📹 Video Detection')
             #html='<h3>영상을 업로드하세요<h3>'
             #st.components.v1.html(html=html, height=50)
             selected_video = st.radio(label='영상을 업로드하세요', options=['1', '2', '3', '4'])
@@ -152,7 +154,7 @@ def main():
                             st.components.v1.html(html="<center>" +'✔️' + "</center>")                            
                     # img_result, video_result = detect.run(source=f'./temp/temp_1_result.mp4')
                         with col3: 
-                            html='<h2>탐지된 영상<h2>'
+                            html='<h2>위험물 탐지<h2>'
                             st.components.v1.html(html="<center>" + html + "</center>", height=48) 
                             st.video('./temp/temp_1_result.mp4', 'rb', start_time=0)
             elif selected_video == "2":
@@ -227,22 +229,23 @@ def main():
                             html='<h2>탐지된 영상<h2>'
                             st.components.v1.html(html="<center>" + html + "</center>", height=48) 
                             st.video('./temp/temp_1_result.mp4', 'rb', start_time=0)
-    elif choice == "LiveCam":
-        st.title("Webcam Live Feed")
-        run = st.checkbox('Run')        
-        #result = detect.run(source=f'./123.mp4')
-        #st.video(result)
+#     elif choice == "LiveCam":
+#         st.title("Webcam Live Feed")
+#         run = st.checkbox('Run')        
+#         #result = detect.run(source=f'./123.mp4')
+#         #st.video(result)
 
-        FRAME_WINDOW = st.image([])
-        camera = cv2.VideoCapture()
-        while run:
-            _, frame = camera.read()
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            FRAME_WINDOW.image(frame)
-        else:
-            st.write('Stopped')
+#         FRAME_WINDOW = st.image([])
+#         camera = cv2.VideoCapture()
+#         while run:
+#             _, frame = camera.read()
+#             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+#             FRAME_WINDOW.image(frame)
+#         else:
+#             st.write('Stopped')
 
-    elif choice == "🗺️ 포트홀 등 도로손상 현황":
+    elif choice == "🗺️ WO Map":
+        st.header('🗺️ GPS 기반 도로손상 현황지도')
         option = st.sidebar.selectbox(
             '어떤 지역을 고르시겠습니까?',
             ('대구 전체','북구', '중구', '서구', '동구',"남구", "수성구", "달서구", "달성군"))
@@ -392,7 +395,8 @@ def main():
             # st.dataframe(df)
 
             # 해당 지역 위치정보 개수 표기
-            st.write(option,'지역, 보수가 필요한 구역: ',len(df),'개')
+            # st.write(option,'지역, 보수가 필요한 구역: ',len(df),'개')
+            st.info(f'{option}지역의 보수 필요 구역: {len(df)}개')
 
             return df_map
         
